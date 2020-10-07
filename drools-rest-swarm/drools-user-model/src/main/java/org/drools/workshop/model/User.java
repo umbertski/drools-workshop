@@ -5,13 +5,13 @@
  */
 package org.drools.workshop.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
+//import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author salaboy
  */
-@XmlRootElement
+//@XmlRootElement
 public class User {
     
     private String name;
