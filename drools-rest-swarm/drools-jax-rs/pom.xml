@@ -9,33 +9,52 @@
     </parent>
     
     <artifactId>drools-jax-rs</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>drools-jax-rs</name>
     <url>http://salaboy.com</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kie.version>7.43.1.Final</kie.version>
-        <junit.version>4.11</junit.version>
-        <version.io.thorntail>2.7.0.Final</version.io.thorntail>
-        <docker.from>jboss/base-jdk:8</docker.from> 
-        <docker.maven.plugin.version>0.30.0</docker.maven.plugin.version>
-        <docker.assemblyDescriptorRef>artifact</docker.assemblyDescriptorRef>
-        <docker.image>salaboy/drools-jax-rs:latest</docker.image>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<kie.version>7.43.1.Final</kie.version>
+		<junit.version>4.11</junit.version>
+		<docker.from>jboss/base-jdk:8</docker.from>
+		<docker.maven.plugin.version>0.30.0</docker.maven.plugin.version>
+		<docker.assemblyDescriptorRef>artifact</docker.assemblyDescriptorRef>
+		<docker.image>salaboy/drools-jax-rs:latest</docker.image>
+		<quarkus-plugin.version>1.8.2.Final</quarkus-plugin.version>
+		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+		<quarkus.platform.version>1.8.2.Final</quarkus.platform.version>
+	</properties>
    
-  
+    <dependencyManagement>
     <dependencies>
-            <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.kie</groupId>
-            <artifactId>kie-api</artifactId>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+
+
+	<dependencies>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-resteasy</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-resteasy-jackson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-api</artifactId>
             <version>${kie.version}</version>
         </dependency>
         <dependency>
@@ -73,20 +92,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.3.1</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
             <plugin>
-				<groupId>io.thorntail</groupId>
-				<artifactId>thorntail-maven-plugin</artifactId>
-               <version>${version.io.thorntail}</version>
- 
+				<groupId>io.quarkus</groupId>
+				<artifactId>quarkus-maven-plugin</artifactId>
 				<executions>
                     <execution>
                         <goals>
-                            <goal>package</goal>
+                            <goal>build</goal>
                         </goals>
                     </execution>
                 </executions> 
@@ -165,4 +182,37 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+    <profile> 
+        <id>native</id>
+        <properties> 
+            <quarkus.package.type>native</quarkus.package.type>
+        </properties>
+<!--         <build> -->
+<!--             <plugins> -->
+<!--                 <plugin>  -->
+<!--                     <groupId>org.apache.maven.plugins</groupId> -->
+<!--                     <artifactId>maven-failsafe-plugin</artifactId> -->
+<!--                     <version>${surefire-plugin.version}</version> -->
+<!--                     <executions> -->
+<!--                         <execution> -->
+<!--                             <goals> -->
+<!--                                 <goal>integration-test</goal> -->
+<!--                                 <goal>verify</goal> -->
+<!--                             </goals> -->
+<!--                             <configuration> -->
+<!--                                 <systemPropertyVariables> -->
+<!--                                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path> -->
+<!--                                     <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager> -->
+<!--                                     <maven.home>${maven.home}</maven.home> -->
+<!--                                 </systemPropertyVariables> -->
+<!--                             </configuration> -->
+<!--                         </execution> -->
+<!--                     </executions> -->
+<!--                 </plugin> -->
+<!--             </plugins> -->
+<!--         </build> -->
+    </profile>
+</profiles>
 </project>
+
