@@ -71,6 +71,7 @@ public class UserCategorizationServiceImpl implements UserCategorizationService 
 
     private void createKieBase() {
         //Helper.setDebug(true);
+        System.out.println(">> Loading rules");
         KieServices kieServices = KieServices.Factory.get();
         //kieContainer = kieServices.getKieClasspathContainer();
         ReleaseId releaseId = 
