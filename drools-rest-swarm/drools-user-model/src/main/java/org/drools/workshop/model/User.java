@@ -6,6 +6,7 @@
 package org.drools.workshop.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 //import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,18 +16,12 @@ import lombok.Data;
  */
 //@XmlRootElement
 @Data
+@ToString
 public class User {
     
     private String name;
     private Integer age;
     private String category;
 
-    @Override
-    public String toString() {
-        return "User{" + "name=" + name + ", age=" + age + ", category=" + category + '}';
-    }
-
-   
-    
-    
+  
 }

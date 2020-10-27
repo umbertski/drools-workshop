@@ -15,13 +15,17 @@ import org.kie.api.builder.ReleaseId;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.KieServices;
+import lombok.extern.slf4j.Slf4j;
 
+//import lombok.extern.jbosslog.JBossLog;
 
 /**
  *
  * @author salaboy
  */
 @ApplicationScoped
+//@JBossLog
+@Slf4j
 public class UserCategorizationServiceImpl implements UserCategorizationService {
 
 //    @Inject
@@ -40,12 +44,12 @@ public class UserCategorizationServiceImpl implements UserCategorizationService 
             createKieBase();
           }
         kSession = kieBase.newKieSession();
-        System.out.println(">> kSession: " + kSession);
+        log.info(">> kSession: " + kSession);
         printKieSessionAllFacts(kSession);
-        System.out.println(">> User: " + user);
+        log.info(">> User: " + user);
         kSession.insert(user);
         int fired = kSession.fireAllRules();
-        System.out.println(">> Fired: " + fired);
+        log.info(">> Fired: " + fired);
         return user;
 
     }
@@ -62,16 +66,15 @@ public class UserCategorizationServiceImpl implements UserCategorizationService 
     }
 
     private void printKieSessionAllFacts(KieSession kSession) {
-        System.out.println(" >> Start - Printing All Facts in the Kie Session");
+    	log.debug(" >> Start - Printing All Facts in the Kie Session");
         for (Object o : kSession.getObjects()) {
-            System.out.println(">> Fact: " + o);
+        	log.debug(">> Fact: " + o);
         }
-        System.out.println(" >> End - Printing All Facts in the Kie Session");
+        log.debug(" >> End - Printing All Facts in the Kie Session");
     }
 
     private void createKieBase() {
         //Helper.setDebug(true);
-        System.out.println(">> Loading rules");
         KieServices kieServices = KieServices.Factory.get();
         //kieContainer = kieServices.getKieClasspathContainer();
         ReleaseId releaseId = 
